@@ -1,7 +1,14 @@
+using LittlePermanence.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace LittlePermanence {
     public class Program {
         public static void Main(string[] args) {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<TutoringCenterDbContext>(options => {
+                options.UseInMemoryDatabase("TutoringCenterDb");
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
