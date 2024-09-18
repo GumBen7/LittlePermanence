@@ -1,3 +1,4 @@
+using LittlePermanence.DebugOnly;
 using LittlePermanence.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,17 @@ namespace LittlePermanence {
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+#if DEBUG
+            builder.Services.AddScoped<DataInitializer>();
+#endif
+
             var app = builder.Build();
+
+#if DEBUG
+            using (var scope = app.Services.CreateScope()) {
+                scope.ServiceProvider.GetRequiredService<DataInitializer>().Initialize();
+            }
+#endif
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment()) {
